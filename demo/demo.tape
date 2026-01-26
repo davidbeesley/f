@@ -6,10 +6,13 @@ Set FontSize 16
 Set Width 900
 Set Height 500
 Set Theme "Catppuccin Mocha"
-Set TypingSpeed 40ms
+Set TypingSpeed 50ms
 
 # Setup: create a temp git repo with some changes
 Hide
+Type "export PS1='> '"
+Enter
+Sleep 100ms
 Type "cd $(mktemp -d)"
 Enter
 Sleep 100ms
@@ -50,14 +53,12 @@ Sleep 500ms
 Type "f d d"
 Enter
 Sleep 2s
-Type "q"
-Sleep 500ms
 
 # Demo: Edit file by ID
 Type "# Edit a file in $EDITOR"
 Enter
 Sleep 500ms
-Type "export EDITOR=vi"
+Type "export EDITOR='vi -u NONE'"
 Enter
 Sleep 300ms
 Type "f d e"
@@ -66,7 +67,7 @@ Sleep 1s
 # vim: Go to end, open line above, type, save
 Type "G"
 Sleep 300ms
-Type "O"
+Type "o"
 Sleep 300ms
 Type "some changes here"
 Sleep 500ms

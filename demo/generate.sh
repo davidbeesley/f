@@ -21,7 +21,7 @@ echo "Output: $OUTPUT_FILE"
 find "$SCRIPT_DIR" -name 'demo-*.gif' -delete 2>/dev/null || true
 
 # Build the project first so demo uses current version
-cargo build --release -p f --quiet
+cargo build --release -p f
 
 # Add to PATH for vhs
 export PATH="$PROJECT_ROOT/target/release:$PATH"
@@ -30,8 +30,9 @@ export PATH="$PROJECT_ROOT/target/release:$PATH"
 cd "$SCRIPT_DIR"
 vhs demo.tape -o "demo-${VERSION}.gif"
 
-# Update README to reference new demo
+# Update README to reference new demo and version badge
 sed -i "s|demo/demo-[0-9]*\.[0-9]*\.[0-9]*\.gif|demo/demo-${VERSION}.gif|g" "$PROJECT_ROOT/README.md"
+sed -i "s|version-[0-9]*\.[0-9]*\.[0-9]*-blue|version-${VERSION}-blue|g" "$PROJECT_ROOT/README.md"
 
 echo "Demo generated: $OUTPUT_FILE"
 echo "README.md updated to reference demo/demo-${VERSION}.gif"

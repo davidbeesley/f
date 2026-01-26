@@ -1,7 +1,8 @@
 # VHS Demo Tape for f
 # Run with: vhs demo/demo.tape
 
-Output demo/demo.gif
+Output demo.gif
+Output demo.ascii
 Set FontSize 16
 Set Width 900
 Set Height 500
@@ -46,6 +47,10 @@ Type "f"
 Enter
 Sleep 2s
 
+Type "clear"
+Enter
+Sleep 300ms
+
 # Demo: View diff by ID
 Type "# View diff for a file"
 Enter
@@ -53,6 +58,10 @@ Sleep 500ms
 Type "f d d"
 Enter
 Sleep 2s
+
+Type "clear"
+Enter
+Sleep 300ms
 
 # Demo: Edit file by ID
 Type "# Edit a file in $EDITOR"
@@ -82,6 +91,10 @@ Type "f"
 Enter
 Sleep 2s
 
+Type "clear"
+Enter
+Sleep 300ms
+
 # Demo: Stage a file using ID
 Type "# Stage a file by ID"
 Enter
@@ -95,6 +108,10 @@ Type "f"
 Enter
 Sleep 2s
 
+Type "clear"
+Enter
+Sleep 300ms
+
 # Demo: Stage remaining files
 Type "# Stage another file (autoselect top of list)"
 Enter
@@ -106,6 +123,10 @@ Sleep 1s
 Type "f"
 Enter
 Sleep 2s
+
+Type "clear"
+Enter
+Sleep 300ms
 
 # Demo: Commit
 Type "# Commit staged changes"

@@ -10,6 +10,8 @@
 
 A keyboard-driven git file manager for the terminal.
 
+![demo](demo/demo-0.1.0.gif)
+
 ## The Problem
 
 When working with git, common workflows like staging files, viewing diffs, and editing changed files require typing full file paths repeatedly. Tab completion helps, but with many changed files it's still slow.

@@ -6,7 +6,7 @@ Set FontSize 16
 Set Width 900
 Set Height 500
 Set Theme "Catppuccin Mocha"
-Set TypingSpeed 20ms
+Set TypingSpeed 40ms
 
 # Setup: create a temp git repo with some changes
 Hide
@@ -57,7 +57,7 @@ Sleep 500ms
 Type "# Edit a file in $EDITOR"
 Enter
 Sleep 500ms
-Type "export EDITOR=vim"
+Type "export EDITOR=vi"
 Enter
 Sleep 300ms
 Type "f d e"

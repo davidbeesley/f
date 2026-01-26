@@ -1,0 +1,79 @@
+name: Demo
+
+on:
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  contents: write
+
+jobs:
+  generate-demo:
+    name: Generate Demo
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Check if demo needs regeneration
+        id: check
+        run: |
+          VERSION=$(grep '^version = ' Cargo.toml | head -1 | sed 's/version = "\(.*\)"/\1/')
+          DEMO_FILE="demo/demo-${VERSION}.gif"
+          if [ -f "$DEMO_FILE" ]; then
+            echo "Demo already exists for version $VERSION"
+            echo "needs_regen=false" >> $GITHUB_OUTPUT
+          else
+            echo "Demo missing for version $VERSION"
+            echo "needs_regen=true" >> $GITHUB_OUTPUT
+            echo "version=$VERSION" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Install dependencies
+        if: steps.check.outputs.needs_regen == 'true'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ffmpeg ttyd
+
+      - name: Install vhs
+        if: steps.check.outputs.needs_regen == 'true'
+        run: |
+          curl -fsSL -o vhs.deb https://github.com/charmbracelet/vhs/releases/download/v0.10.0/vhs_0.10.0_amd64.deb
+          sudo dpkg -i vhs.deb
+
+      - name: Install Rust
+        if: steps.check.outputs.needs_regen == 'true'
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Build f
+        if: steps.check.outputs.needs_regen == 'true'
+        run: cargo build --release -p f
+
+      - name: Generate demo
+        if: steps.check.outputs.needs_regen == 'true'
+        run: |
+          VERSION=${{ steps.check.outputs.version }}
+          export PATH="$PWD/target/release:$PATH"
+
+          # Remove old demos
+          rm -f demo/demo-*.gif
+
+          # Generate new demo
+          cd demo
+          vhs demo.tape -o "demo-${VERSION}.gif"
+
+          # Update README
+          cd ..
+          sed -i "s|demo/demo-[0-9]*\.[0-9]*\.[0-9]*\.gif|demo/demo-${VERSION}.gif|g" README.md
+
+      - name: Commit and push
+        if: steps.check.outputs.needs_regen == 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add demo/*.gif README.md
+          git commit -m "Generate demo for v${{ steps.check.outputs.version }}"
+          git push

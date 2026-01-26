@@ -140,7 +140,13 @@ fn exec_git(args: &[&str]) -> ! {
 
 fn exec_editor(path: &str, config: &Config) -> ! {
     let editor = get_editor(config);
-    let err = Command::new(&editor).arg(path).exec();
+    // Run through shell to support EDITOR with arguments (e.g., "vim -u NONE")
+    let err = Command::new("sh")
+        .arg("-c")
+        .arg(format!("{} \"$1\"", editor))
+        .arg("sh") // $0
+        .arg(path) // $1
+        .exec();
     eprintln!("Failed to exec {}: {}", editor, err);
     process::exit(1);
 }
@@ -512,7 +518,12 @@ mod interactive {
                     }
                     'e' => {
                         let editor = config.editor();
-                        let _ = Command::new(&editor).arg(&file.abs_path).exec();
+                        let _ = Command::new("sh")
+                            .arg("-c")
+                            .arg(format!("{} \"$1\"", editor))
+                            .arg("sh")
+                            .arg(&file.abs_path)
+                            .exec();
                     }
                     _ => {}
                 }

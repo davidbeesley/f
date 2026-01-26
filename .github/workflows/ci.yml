@@ -12,8 +12,8 @@ env:
   CARGO_TERM_COLOR: always
 
 jobs:
-  version-badge:
-    name: Version Badge
+  version-check:
+    name: Version Check
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -26,6 +26,29 @@ jobs:
             exit 1
           fi
           echo "Version badge matches: $CARGO_VERSION"
+      - name: Check demo GIF matches Cargo.toml version
+        run: |
+          CARGO_VERSION=$(grep '^version = ' Cargo.toml | head -1 | sed 's/version = "\(.*\)"/\1/')
+          DEMO_FILE="demo/demo-${CARGO_VERSION}.gif"
+          if [ ! -f "$DEMO_FILE" ]; then
+            echo "Demo GIF missing: $DEMO_FILE"
+            echo "Run: ./demo/generate.sh"
+            exit 1
+          fi
+          # Check only one demo GIF exists
+          DEMO_COUNT=$(find demo -name 'demo-*.gif' | wc -l)
+          if [ "$DEMO_COUNT" -ne 1 ]; then
+            echo "Expected exactly 1 demo GIF, found $DEMO_COUNT:"
+            find demo -name 'demo-*.gif'
+            echo "Remove old demo files before committing"
+            exit 1
+          fi
+          # Check README references the correct demo
+          if ! grep -q "demo/demo-${CARGO_VERSION}.gif" README.md; then
+            echo "README does not reference demo/demo-${CARGO_VERSION}.gif"
+            exit 1
+          fi
+          echo "Demo version matches: $CARGO_VERSION"
 
   check:
     name: Check

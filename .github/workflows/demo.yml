@@ -41,8 +41,8 @@ jobs:
       - name: Install vhs
         if: steps.check.outputs.needs_regen == 'true'
         run: |
-          curl -fsSL https://github.com/charmbracelet/vhs/releases/download/v0.7.2/vhs_0.7.2_linux_amd64.tar.gz | tar xz
-          sudo mv vhs /usr/local/bin/
+          curl -fsSL -o vhs.deb https://github.com/charmbracelet/vhs/releases/download/v0.10.0/vhs_0.10.0_amd64.deb
+          sudo dpkg -i vhs.deb
 
       - name: Install Rust
         if: steps.check.outputs.needs_regen == 'true'

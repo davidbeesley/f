@@ -1,0 +1,27 @@
+[package]
+name = "f"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+repository.workspace = true
+description = "A beautiful git file manager for the command line"
+readme = "../../README.md"
+keywords = ["git", "cli", "file-manager", "terminal"]
+categories = ["command-line-utilities", "development-tools"]
+
+[[bin]]
+name = "f"
+path = "src/f.rs"
+
+[dependencies]
+anyhow = { workspace = true }
+env_logger = { workspace = true }
+log = { workspace = true }
+clap = { version = "4", features = ["derive"] }
+crossterm = "0.28"
+colored = "2"
+anstyle = "1"
+dirs = "5"
+toml = "0.8"
+serde = { version = "1", features = ["derive"] }

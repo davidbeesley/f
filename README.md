@@ -2,7 +2,7 @@
 
 [![CI](https://github.com/davidbeesley/f/actions/workflows/ci.yml/badge.svg)](https://github.com/davidbeesley/f/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-![Version](https://img.shields.io/badge/version-0.1.0-blue)
+![Version](https://img.shields.io/badge/version-0.1.1-blue)
 ![Linux](https://img.shields.io/badge/Linux-supported-green)
 ![macOS](https://img.shields.io/badge/macOS-supported-green)
 ![Windows](https://img.shields.io/badge/Windows-unsupported-red)
@@ -10,7 +10,7 @@
 
 A keyboard-driven git file manager for the terminal.
 
-![demo](demo/demo-0.1.0.gif)
+![demo](demo/demo-0.1.1.gif)
 
 ## The Problem
 

@@ -289,10 +289,14 @@ pub enum IdMatch {
 
 pub fn find_file_by_id(files: &[GitFile], id: &str) -> IdMatch {
     let matches: Vec<_> = files.iter().filter(|f| f.stable_id.matches(id)).collect();
-    match matches.len() {
-        0 => IdMatch::NotFound,
-        1 => IdMatch::Unique(matches[0].clone()),
-        n => IdMatch::Ambiguous(n),
+    if matches.is_empty() {
+        return IdMatch::NotFound;
+    }
+    let unique_paths: std::collections::HashSet<_> = matches.iter().map(|f| &f.rel_path).collect();
+    if unique_paths.len() == 1 {
+        IdMatch::Unique(matches[0].clone())
+    } else {
+        IdMatch::Ambiguous(unique_paths.len())
     }
 }
 
@@ -420,6 +424,20 @@ mod tests {
         match find_file_by_id(&files, "fkk") {
             IdMatch::Unique(f) => assert_eq!(f.rel_path, "src/main.rs"),
             _ => panic!("old ID should still work"),
+        }
+    }
+
+    #[test]
+    fn find_file_same_path_staged_and_unstaged_is_unique() {
+        let mut staged = make_file("src/main.rs", "fk", "fkkabcdefghi");
+        staged.file_type = FileType::Staged;
+        let mut unstaged = make_file("src/main.rs", "fk", "fkkabcdefghi");
+        unstaged.file_type = FileType::Unstaged;
+        let files = vec![staged, unstaged];
+        match find_file_by_id(&files, "fk") {
+            IdMatch::Unique(f) => assert_eq!(f.rel_path, "src/main.rs"),
+            IdMatch::Ambiguous(n) => panic!("expected unique, got ambiguous({})", n),
+            IdMatch::NotFound => panic!("expected unique, got not found"),
         }
     }
 

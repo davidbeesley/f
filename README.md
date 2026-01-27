@@ -14,7 +14,8 @@ A keyboard-driven git file manager for the terminal.
 
 ## The Problem
 
-When working with git, common workflows like staging files, viewing diffs, and editing changed files require typing full file paths repeatedly. Tab completion helps, but with many changed files it's still slow.
+When working with git, common workflows like staging files, viewing diffs, and editing changed files require typing full file paths repeatedly. Tab completion helps, but with many changed files it's still slow. 
+This can be exacerbated by AI driven workflows as the amount of time reviewing grows substantially relative writing code. 
 
 ## The Solution
 

@@ -3,7 +3,7 @@
 
 Output demo.gif
 Output demo.ascii
-Set FontSize 16
+Set FontSize 21
 Set Width 900
 Set Height 500
 Set Theme "Catppuccin Mocha"
@@ -40,31 +40,31 @@ Sleep 300ms
 Show
 
 # Demo: List changed files
-Type "# List changed files with stable IDs"
+Type "# 1/6 List changed files with stable IDs"
 Enter
 Sleep 500ms
 Type "f"
 Enter
-Sleep 2s
+Sleep 3s
 
 Type "clear"
 Enter
 Sleep 300ms
 
 # Demo: View diff by ID
-Type "# View diff for a file"
+Type "# 2/6 View diff for a file"
 Enter
 Sleep 500ms
 Type "f d d"
 Enter
-Sleep 2s
+Sleep 3s
 
 Type "clear"
 Enter
 Sleep 300ms
 
 # Demo: Edit file by ID
-Type "# Edit a file in $EDITOR"
+Type "# 3/6 Edit a file in $EDITOR"
 Enter
 Sleep 500ms
 Type "export EDITOR='vi -u NONE'"
@@ -89,14 +89,14 @@ Sleep 1s
 # Show status after edit
 Type "f"
 Enter
-Sleep 2s
+Sleep 3s
 
 Type "clear"
 Enter
 Sleep 300ms
 
 # Demo: Stage a file using ID
-Type "# Stage a file by ID"
+Type "# 4/6 Stage a file by ID"
 Enter
 Sleep 500ms
 Type "f d a"
@@ -106,14 +106,14 @@ Sleep 1s
 # Show updated status
 Type "f"
 Enter
-Sleep 2s
+Sleep 3s
 
 Type "clear"
 Enter
 Sleep 300ms
 
 # Demo: Stage remaining files
-Type "# Stage another file (autoselect top of list)"
+Type "# 5/6 Stage another file (autoselect top of list)"
 Enter
 Sleep 500ms
 Type "f a"
@@ -122,14 +122,14 @@ Sleep 1s
 
 Type "f"
 Enter
-Sleep 2s
+Sleep 3s
 
 Type "clear"
 Enter
 Sleep 300ms
 
 # Demo: Commit
-Type "# Commit staged changes"
+Type "# 6/6 Commit staged changes"
 Enter
 Sleep 500ms
 Type "f c update greeting and add notes"

@@ -43,6 +43,7 @@ pub struct GitFile {
     pub file_type: FileType,
     pub stable_id: StableId,
     pub diff_stats: Option<DiffStats>,
+    pub is_deleted: bool,
 }
 
 pub fn get_git_root() -> Result<PathBuf> {
@@ -203,6 +204,7 @@ pub fn get_all_files(id_chars: &[char]) -> Result<Vec<GitFile>> {
                 abs_path,
                 FileType::Untracked,
                 stats,
+                false, // not deleted
             ));
             continue;
         }
@@ -215,6 +217,7 @@ pub fn get_all_files(id_chars: &[char]) -> Result<Vec<GitFile>> {
                 abs_path.clone(),
                 FileType::Staged,
                 staged_stats.get(filepath).cloned(),
+                index_char == 'D', // staged deletion
             ));
         }
 
@@ -226,6 +229,7 @@ pub fn get_all_files(id_chars: &[char]) -> Result<Vec<GitFile>> {
                 abs_path.clone(),
                 FileType::Unstaged,
                 unstaged_stats.get(filepath).cloned(),
+                worktree_char == 'D', // unstaged deletion
             ));
         }
     }
@@ -237,11 +241,16 @@ pub fn get_all_files(id_chars: &[char]) -> Result<Vec<GitFile>> {
         .cloned()
         .collect();
 
-    let all_paths: Vec<String> = all_files.iter().map(|(_, p, _, _, _)| p.clone()).collect();
+    let all_paths: Vec<String> = all_files
+        .iter()
+        .map(|(_, p, _, _, _, _)| p.clone())
+        .collect();
     let all_ids = generate_ids(&all_paths, id_chars);
 
     let mut result = Vec::new();
-    for (i, (mtime, rel_path, abs_path, file_type, diff_stats)) in all_files.iter().enumerate() {
+    for (i, (mtime, rel_path, abs_path, file_type, diff_stats, is_deleted)) in
+        all_files.iter().enumerate()
+    {
         let (display, full_hash) = all_ids[i].clone();
         result.push(GitFile {
             mtime: *mtime,
@@ -250,6 +259,7 @@ pub fn get_all_files(id_chars: &[char]) -> Result<Vec<GitFile>> {
             file_type: *file_type,
             stable_id: StableId { display, full_hash },
             diff_stats: diff_stats.clone(),
+            is_deleted: *is_deleted,
         });
     }
 
@@ -322,6 +332,7 @@ mod tests {
                 full_hash: full_hash.to_string(),
             },
             diff_stats: None,
+            is_deleted: false,
         }
     }
 

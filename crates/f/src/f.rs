@@ -200,7 +200,11 @@ fn cmd_staged_diff(id: Option<String>, config: &Config) -> ! {
 
 fn cmd_add(id: Option<String>, config: &Config) -> ! {
     let file = require_file(resolve_file(id, config));
-    println!("Adding: {}", file.rel_path);
+    if file.is_deleted {
+        println!("Staging deletion: {}", file.rel_path);
+    } else {
+        println!("Adding: {}", file.rel_path);
+    }
     exec_git(&["add", &file.abs_path.to_string_lossy()])
 }
 
@@ -271,7 +275,11 @@ fn handle_id_first(id: &str, action: Option<&str>, config: &Config) {
 
     match action {
         Some("a" | "add") => {
-            println!("Adding: {}", file.rel_path);
+            if file.is_deleted {
+                println!("Staging deletion: {}", file.rel_path);
+            } else {
+                println!("Adding: {}", file.rel_path);
+            }
             exec_git(&["add", &file.abs_path.to_string_lossy()]);
         }
         Some("d" | "diff") => {
@@ -501,7 +509,11 @@ mod interactive {
 
                 match action {
                     'a' => {
-                        println!("Adding: {}", file.rel_path);
+                        if file.is_deleted {
+                            println!("Staging deletion: {}", file.rel_path);
+                        } else {
+                            println!("Adding: {}", file.rel_path);
+                        }
                         let _ = Command::new("git")
                             .args(["add", &file.abs_path.to_string_lossy()])
                             .exec();

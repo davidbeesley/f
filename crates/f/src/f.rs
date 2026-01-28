@@ -189,13 +189,13 @@ fn cmd_diff(id: Option<String>, config: &Config) -> ! {
             &file.abs_path.to_string_lossy(),
         ])
     } else {
-        exec_git(&["diff", &file.abs_path.to_string_lossy()])
+        exec_git(&["diff", "--", &file.abs_path.to_string_lossy()])
     }
 }
 
 fn cmd_staged_diff(id: Option<String>, config: &Config) -> ! {
     let file = require_file(resolve_file(id, config));
-    exec_git(&["diff", "--staged", &file.abs_path.to_string_lossy()])
+    exec_git(&["diff", "--staged", "--", &file.abs_path.to_string_lossy()])
 }
 
 fn cmd_add(id: Option<String>, config: &Config) -> ! {
@@ -283,11 +283,11 @@ fn handle_id_first(id: &str, action: Option<&str>, config: &Config) {
                     &file.abs_path.to_string_lossy(),
                 ]);
             } else {
-                exec_git(&["diff", &file.abs_path.to_string_lossy()]);
+                exec_git(&["diff", "--", &file.abs_path.to_string_lossy()]);
             }
         }
         Some("sd" | "staged-diff") => {
-            exec_git(&["diff", "--staged", &file.abs_path.to_string_lossy()]);
+            exec_git(&["diff", "--staged", "--", &file.abs_path.to_string_lossy()]);
         }
         Some("e" | "v" | "edit") => {
             exec_editor(&file.abs_path.to_string_lossy(), config);
@@ -508,12 +508,12 @@ mod interactive {
                     }
                     'd' => {
                         let _ = Command::new("git")
-                            .args(["diff", &file.abs_path.to_string_lossy()])
+                            .args(["diff", "--", &file.abs_path.to_string_lossy()])
                             .exec();
                     }
                     's' => {
                         let _ = Command::new("git")
-                            .args(["diff", "--staged", &file.abs_path.to_string_lossy()])
+                            .args(["diff", "--staged", "--", &file.abs_path.to_string_lossy()])
                             .exec();
                     }
                     'e' => {

@@ -59,6 +59,12 @@ pub fn list_files(files: &[GitFile]) {
         return;
     }
 
+    let max_id_width = files
+        .iter()
+        .map(|f| f.stable_id.display.len())
+        .max()
+        .unwrap_or(1);
+
     let mut last_type: Option<FileType> = None;
 
     for file in files {
@@ -75,7 +81,7 @@ pub fn list_files(files: &[GitFile]) {
             last_type = Some(file.file_type);
         }
 
-        let id_str = format!("{:<5}", file.stable_id);
+        let id_str = format!("{:<width$}", file.stable_id.display, width = max_id_width);
         let stats_str = match &file.diff_stats {
             Some(stats) if stats.added > 0 || stats.removed > 0 => {
                 format!(
